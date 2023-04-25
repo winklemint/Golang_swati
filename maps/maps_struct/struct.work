@@ -1,0 +1,28 @@
+package main
+func main(){
+	type employee struct {
+		salary int
+		country string
+	}
+	emp1 := employee {
+		salary : 3000
+		country: "Uganda"
+	}
+	emp2 := employee {
+		salary : 4000
+		country : "India"
+	}
+	emp3 := employee {
+		salary : 5000
+		country : "Sydney"
+	}
+	employeeInfo := map[string]int {
+		"Steve" : emp1,
+		"Raj" : emp2,
+		"Jacob" : emp3,
+	}
+	for name, salary, country := range employeeInfo {
+		fmt.Println("Employee name %s, Salary %d , Country %s" , name, salary, country)
+	}
+
+}
