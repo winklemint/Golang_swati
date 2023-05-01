@@ -14,25 +14,37 @@ type employee struct {
 	Esalary int
 }
 
-func dbConnect() (db *sql.DB) {
-	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/WalkingDreamzdb")
+func dbConn() (db *sql.DB) {
+	dbDriver := "mysql"
+	dbUser := "root"
+	dbPass := "root"
+	dbName := "WalkingDreamzdb"
+	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
 	return db
 }
+
+// func dbConn() (db *sql.DB) {
+// 	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/forestdb")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	return db
+// }
+
 func CreateDatabase(w http.ResponseWriter, r *http.Request) {
-	db := dbConnect()
+	db := dbConn()
 	_, err := db.Exec("CREATE DATABASE WalkingDreamzdb")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Database created successfully")
 }
 
 func CreateTable(w http.ResponseWriter, r *http.Request) {
-	db := dbConnect()
-	_, err := db.Exec("CREATE TABLE employee(ID PRIMARY KEY NOT NULL AUTO_INCREMENT, Ename VARCHAR(50) , Esalary INT)")
+	db := dbConn()
+	_, err := db.Exec("CREATE TABLE Employee(ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, Ename VARCHAR(50), Esalary INT))")
 	if err != nil {
 		panic(err)
 	}
@@ -41,7 +53,7 @@ func CreateTable(w http.ResponseWriter, r *http.Request) {
 }
 
 func InsertTable(w http.ResponseWriter, r *http.Request) {
-	db := dbConnect()
+	db := dbConn()
 	_, err := db.Exec("INSERT INTO employee(Ename , Esalary) VALUES('Swapnil' , 45)")
 	if err != nil {
 		panic(err)
@@ -51,7 +63,10 @@ func InsertTable(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/createdb", CreateDatabase)
-	http.HandleFunc("/createtable", CreateTable)
-	fmt.Println(http.ListenAndServe(":8763", nil))
+	dbConn()
+
+	//log.Println("Server started on: http://localhost:8080")
+	http.HandleFunc("/", CreateTable)
+	http.HandleFunc("/inserttable", InsertTable)
+	http.ListenAndServe(":8080", nil)
 }
