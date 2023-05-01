@@ -14,25 +14,25 @@ type employee struct {
 	Esalary int
 }
 
-func dbConn() (db *sql.DB) {
-	dbDriver := "mysql"
-	dbUser := "root"
-	dbPass := "root"
-	dbName := "WalkingDreamzdb"
-	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
-	if err != nil {
-		panic(err.Error())
-	}
-	return db
-}
-
 // func dbConn() (db *sql.DB) {
-// 	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/forestdb")
+// 	dbDriver := "mysql"
+// 	dbUser := "root"
+// 	dbPass := "root"
+// 	dbName := "WalkingDreamzdb"
+// 	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
 // 	if err != nil {
-// 		panic(err)
+// 		panic(err.Error())
 // 	}
 // 	return db
 // }
+
+func dbConn() (db *sql.DB) {
+	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/")
+	if err != nil {
+		panic(err)
+	}
+	return db
+}
 
 func CreateDatabase(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
